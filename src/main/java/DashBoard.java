@@ -1,4 +1,6 @@
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +16,7 @@ import org.kohsuke.github.GitHubBuilder;
 public class DashBoard {
 
     private static final String REPOSITORY_NAME = "ikjo93/live-study-dashboard";
+    // private static final String REPOSITORY_NAME = "whiteship/live-study";
 
     public void run() throws IOException {
         GitHub gitHub = new GitHubBuilder()
@@ -40,9 +43,13 @@ public class DashBoard {
             }
         }
 
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
         for (String user : attendanceByUser.keySet()) {
             double rate = (double) (attendanceByUser.get(user) * 100) / issues.size();
-            System.out.printf("%s님의 출석율은 %.2f%%입니다.%n", user, rate);
+            bw.write(String.format("%s님의 출석율은 %.2f%%입니다.%n", user, rate));
         }
+
+        bw.flush();
+        bw.close();
     }
 }
